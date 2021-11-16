@@ -12,7 +12,10 @@
     <div>
         <a href = '/new'><input type="submit" value="追加"></a>
         <ul>
-            <a href='/top/<%=@title%>'><li><%=@title%></li></a>
+            <% @memos.each do |memo| %>
+            <li><a href='/top/<%=memo["id"]%>'><%=memo["title"]%></a></li>
+            <% end %>
+            
         </ul>
         </form>
     </div>
