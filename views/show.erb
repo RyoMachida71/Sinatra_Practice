@@ -6,17 +6,15 @@
     <title>メモアプリ</title>
 </head>
 <body>
-    <form action="/top" method="get">
     <div>
         <h1>メモアプリ</h1>
     </div>
     <div>
-        <h2><%=@hash["title"]%></h2>
-        <p><%=@hash["content"]%></p>
+        <h2><%=@memo["title"]%></h2>
+        <p><%=@memo["content"]%></p>
     </div>
-    </form>
     <div>
-    <a href='/edit'><input type="submit" value="変更"></a>
+    <a href='/memos/<%=@id%>/edit'><input type="submit" value="編集"></a>
     <input type="submit" value="削除">
     </div>
     
