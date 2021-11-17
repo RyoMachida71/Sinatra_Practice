@@ -10,11 +10,11 @@
         <h1>メモアプリ</h1>
     </div>
     <div>
-        <h2><%=@memo["title"]%></h2>
-        <p><%=@memo["content"]%></p>
+        <h2><%=h(@memo["title"])%></h2>
+        <p><%=h(@memo["content"])%></p>
     </div>
     <div>
-    <a href='/memos/<%=@id%>/edit'><input type="submit" value="編集"></a><br>
+    <a href='/memos/<%=@id%>/edit'><input type="submit" value="編集"></a>
     <form method="post" action="/memos/<%=@id%>">
         <input type="hidden" name="_method" value="DELETE">
         <input type="submit" value="削除">

@@ -13,7 +13,7 @@
         <a href = '/new'><input type="submit" value="追加"></a>
         <ul>
             <% @memos.each do |key, memo| %>
-               <a href='/memos/<%=key%>/details'><li><%=memo["title"]%></li></a>
+               <a href='/memos/<%=key%>/details'><li><%=h(memo["title"])%></li></a>
             <% end %>
         </ul>
         </form>
