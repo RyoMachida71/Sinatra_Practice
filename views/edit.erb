@@ -9,7 +9,7 @@
     <div>
         <h1>メモアプリ</h1>
     </div>
-    <form action="/memos/<%=@id%>/edit" method="post">
+    <form action="/memos/<%=@id%>" method="post">
     <div>
         <label for="title">タイトル</label><br>
         <textarea type="text" name="title" id="title" cols="20" rows="1"><%=@memo["title"]%></textarea><br>
