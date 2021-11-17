@@ -9,22 +9,23 @@ helpers do
     end
 end
 
+$file_path = "json/data.json"
 
 get '/memos' do
-    File.exist?("json/test.json") ? (@memos = File.open("json/test.json") {|f| JSON.load(f)}) : (File.open("json/test.json", 'w')  {|f| f.write("{}")}
-    @memos = File.open("json/test.json") {|f| JSON.load(f)})
+    File.exist?($file_path) ? (@memos = File.open($file_path) {|f| JSON.load(f)}) : (File.open($file_path, 'w')  {|f| f.write("{}")}
+    @memos = File.open($file_path) {|f| JSON.load(f)})
     erb:top
 end
 
 post '/memos' do
-    @memos = File.open("json/test.json") {|f| JSON.load(f)}
+    @memos = File.open($file_path) {|f| JSON.load(f)}
     @memos[SecureRandom.uuid] = {"title" => params['title'], "content" => params['content']}
-    File.open("json/test.json", 'w') {|f| JSON.dump(@memos, f)}
+    File.open($file_path, 'w') {|f| JSON.dump(@memos, f)}
     redirect to "/memos"
 end
 
 get '/memos/:id/details' do
-    memos = File.open("json/test.json") {|f| JSON.load(f)} 
+    memos = File.open($file_path) {|f| JSON.load(f)} 
     @id = params[:id]
     @memo = memos[@id]
     erb:show
@@ -35,7 +36,7 @@ get '/new' do
 end
 
 get '/memos/:id/edit' do
-    memos = File.open("json/test.json") {|f| JSON.load(f)} 
+    memos = File.open($file_path) {|f| JSON.load(f)} 
     @id = params[:id]
     @memo = memos[@id]
     erb:edit
@@ -43,15 +44,15 @@ end
 
 patch '/memos/:id' do
     id = params[:id]
-    @memos = File.open("json/test.json") {|f| JSON.load(f)}
+    @memos = File.open($file_path) {|f| JSON.load(f)}
     @memos[id] = {"title" => params['title'], "content" => params['content']}
-    File.open("json/test.json", 'w') {|f| JSON.dump(@memos, f)}
+    File.open($file_path, 'w') {|f| JSON.dump(@memos, f)}
     redirect to '/memos'
 end
 
 delete '/memos/:id' do
-    memos = File.open("json/test.json") {|f| JSON.load(f)}
+    memos = File.open($file_path) {|f| JSON.load(f)}
     memos.delete(params[:id])
-    File.open("json/test.json", 'w') {|f| JSON.dump(memos, f)} 
+    File.open($file_path, 'w') {|f| JSON.dump(memos, f)} 
     redirect to '/memos'
 end
