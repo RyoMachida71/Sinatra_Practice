@@ -9,7 +9,7 @@ helpers do
     end
 end
 
-$file_path = "json/data.json"
+$file_path = "data/data.json"
 
 get '/memos' do
     File.exist?($file_path) ? (@memos = File.open($file_path) {|f| JSON.load(f)}) : (File.open($file_path, 'w')  {|f| f.write("{}")}
