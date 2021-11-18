@@ -1,58 +1,68 @@
+# frozen_string_literal: true
+
 require 'sinatra'
 require 'sinatra/reloader'
 require 'json'
 
-
 helpers do
-    def h(text)
-        Rack::Utils.escape_html(text)
-    end
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
 end
 
-$file_path = "data/data.json"
+def load(file_path)
+  File.open(FILE_PATH) { |f| JSON.load(f) }
+end
+
+FILE_PATH = 'data/data.json'
+FILE_PATH.freeze
 
 get '/memos' do
-    File.exist?($file_path) ? (@memos = File.open($file_path) {|f| JSON.load(f)}) : (File.open($file_path, 'w')  {|f| f.write("{}")}
-    @memos = File.open($file_path) {|f| JSON.load(f)})
-    erb:top
+  if File.exist?(FILE_PATH)
+    @memos = load(FILE_PATH)
+  else
+    File.open(FILE_PATH, 'w') { |f| f.write('{}') }
+  end
+  @memos = load(FILE_PATH)
+  erb :top
 end
 
 post '/memos' do
-    @memos = File.open($file_path) {|f| JSON.load(f)}
-    @memos[SecureRandom.uuid] = {"title" => params['title'], "content" => params['content']}
-    File.open($file_path, 'w') {|f| JSON.dump(@memos, f)}
-    redirect to "/memos"
+  @memos = load(FILE_PATH)
+  @memos[SecureRandom.uuid] = { 'title' => params['title'], 'content' => params['content'] }
+  File.open(FILE_PATH, 'w') { |f| JSON.dump(@memos, f) }
+  redirect to '/memos'
 end
 
 get '/memos/:id/details' do
-    memos = File.open($file_path) {|f| JSON.load(f)} 
-    @id = params[:id]
-    @memo = memos[@id]
-    erb:show
+  memos = load(FILE_PATH)
+  @id = params[:id]
+  @memo = memos[@id]
+  erb :show
 end
 
 get '/new' do
-    erb:new
+  erb :new
 end
 
 get '/memos/:id/edit' do
-    memos = File.open($file_path) {|f| JSON.load(f)} 
-    @id = params[:id]
-    @memo = memos[@id]
-    erb:edit
+  memos = load(FILE_PATH)
+  @id = params[:id]
+  @memo = memos[@id]
+  erb :edit
 end
 
 patch '/memos/:id' do
-    id = params[:id]
-    @memos = File.open($file_path) {|f| JSON.load(f)}
-    @memos[id] = {"title" => params['title'], "content" => params['content']}
-    File.open($file_path, 'w') {|f| JSON.dump(@memos, f)}
-    redirect to '/memos'
+  id = params[:id]
+  @memos = load(FILE_PATH)
+  @memos[id] = { 'title' => params['title'], 'content' => params['content'] }
+  File.open(FILE_PATH, 'w') { |f| JSON.dump(@memos, f) }
+  redirect to '/memos'
 end
 
 delete '/memos/:id' do
-    memos = File.open($file_path) {|f| JSON.load(f)}
-    memos.delete(params[:id])
-    File.open($file_path, 'w') {|f| JSON.dump(memos, f)} 
-    redirect to '/memos'
+  @memos = load(FILE_PATH)
+  @memos.delete(params[:id])
+  File.open(FILE_PATH, 'w') { |f| JSON.dump(@memos, f) }
+  redirect to '/memos'
 end
